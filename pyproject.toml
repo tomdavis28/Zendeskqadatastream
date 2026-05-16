@@ -1,0 +1,25 @@
+[project]
+name = "zqa-stream"
+version = "0.1.0"
+description = "Extract Zendesk QA (formerly Klaus) review data and stream it to configurable sinks."
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.32",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "responses>=0.25",
+]
+
+[project.scripts]
+zqa-stream = "zqa_stream.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
