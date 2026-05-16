@@ -44,6 +44,9 @@ tests/
 ## Roadmap
 
 - [x] CSV sink with daily upsert
+- [x] Multi-workspace support (each row tagged with `workspace_id`)
+- [ ] Zendesk Support users extractor for roster join (tenure, TL, language, role)
 - [ ] Google Sheets sink via `gspread` + service account
 - [ ] AWS Lambda packaging + EventBridge daily trigger
-- [ ] Disputes + users extractors
+
+Calibrations are out of scope (no Public API endpoint exists).
