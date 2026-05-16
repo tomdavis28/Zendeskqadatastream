@@ -1,5 +1,5 @@
 from datetime import date, datetime, timedelta, timezone
-from typing import Iterator
+from typing import Iterable, Iterator
 
 from .client import ZendeskQAClient
 
@@ -16,7 +16,19 @@ def extract_reviews(
 ) -> Iterator[dict]:
     path = f"/qa/api/export/workspace/{workspace_id}/reviews"
     params = {"fromDate": _iso(from_date), "toDate": _iso(to_date)}
-    yield from client.paginate(path, params=params)
+    for row in client.paginate(path, params=params):
+        row.setdefault("workspace_id", workspace_id)
+        yield row
+
+
+def extract_reviews_multi(
+    client: ZendeskQAClient,
+    workspace_ids: Iterable[str],
+    from_date: date,
+    to_date: date,
+) -> Iterator[dict]:
+    for ws in workspace_ids:
+        yield from extract_reviews(client, ws, from_date, to_date)
 
 
 def default_backfill_window(months: int = 12) -> tuple[date, date]:

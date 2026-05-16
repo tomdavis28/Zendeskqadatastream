@@ -4,7 +4,7 @@ from pathlib import Path
 
 from .client import ZendeskQAClient
 from .config import Settings
-from .reviews import default_backfill_window, extract_reviews
+from .reviews import default_backfill_window, extract_reviews_multi
 from .sinks.csv_sink import upsert_csv
 
 
@@ -30,9 +30,12 @@ def main(argv: list[str] | None = None) -> int:
         start, end = default_backfill_window(12)
 
     client = ZendeskQAClient(settings.base_url, settings.api_token)
-    rows = extract_reviews(client, settings.workspace_id, start, end)
+    rows = extract_reviews_multi(client, settings.workspace_ids, start, end)
     inserted, updated = upsert_csv(args.out, rows, id_field="id")
-    print(f"Wrote {args.out}: {inserted} inserted, {updated} updated (window {start} -> {end}).")
+    print(
+        f"Wrote {args.out}: {inserted} inserted, {updated} updated "
+        f"(window {start} -> {end}, workspaces: {', '.join(settings.workspace_ids)})."
+    )
     return 0
 
 
